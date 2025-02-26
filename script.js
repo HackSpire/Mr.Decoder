@@ -146,7 +146,7 @@ function generateQRCode(encryptedText) {
         return;
     }
 
-    let websiteURL = "https://your-username.github.io/repository-name/"; // Update this when hosted
+    let websiteURL = "https://hackspire.github.io/Mr.Decoder/"; 
     let qrText = `${websiteURL}?text=${encodeURIComponent(encryptedText)}`;
 
     document.getElementById("qrcode").innerHTML = "";
