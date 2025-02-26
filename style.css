@@ -1,0 +1,148 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Background with floating animation */
+body {
+    background: linear-gradient(135deg, #f5f6f8, #1e293b);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Main Container */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Floating Effect */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Title */
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    color: #FFD700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+    animation: glow 1.5s infinite alternate;
+}
+
+/* Textarea & Select */
+textarea, select, input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Focus Effect */
+textarea:focus, select:focus, input:focus {
+    border: 1px solid #FFD700;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Buttons */
+button {
+    width: 45%;
+    padding: 12px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Encrypt & Decrypt Button */
+.encrypt-btn {
+    background: linear-gradient(135deg, #1e90ff, #007bff);
+    color: white;
+    box-shadow: 0 4px 10px rgba(30, 144, 255, 0.4);
+}
+
+.encrypt-btn:hover {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.8);
+}
+
+/* Decrypt Button */
+.decrypt-btn {
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
+}
+
+.decrypt-btn:hover {
+    background: linear-gradient(135deg, #218838, #1c7430);
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.8);
+}
+
+/* Copy & Download Buttons */
+.copy-btn {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: white;
+}
+
+.copy-btn:hover {
+    background: linear-gradient(135deg, #ff9800, #e68900);
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #6610f2, #5a0fc8);
+    color: white;
+}
+
+.download-btn:hover {
+    background: linear-gradient(135deg, #5a0fc8, #480ba5);
+}
+
+/* QR Code */
+#qrcode {
+    margin-top: 15px;
+}
+
+/* Particle Background */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; 
+    height: 100vh; 
+    z-index: -1; 
+    pointer-events: none;
+}
+
+
+/* Glow Animation */
+@keyframes glow {
+    0% { text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    100% { text-shadow: 0 0 15px rgba(255, 215, 0, 1); }
+}
