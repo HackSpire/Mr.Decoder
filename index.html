@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encryption-Decryption Web App</title>
+    <title>Mr. Decoder Web App</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body class="bg-gray-900 flex justify-center items-center h-screen">
+<body class="bg-gray-900 flex flex-col justify-center items-center min-h-screen space-y-10 py-10">
 
-    <div class="bg-gray-800 text-white p-6 rounded-2xl shadow-xl transition transform hover:scale-105 w-96">
+    <!-- TEXT ENCRYPTION SECTION -->
+    <div class="bg-gray-800 text-white p-6 rounded-2xl shadow-xl w-96">
         <h2 class="text-2xl font-bold text-center mb-4 animate-pulse">MR. DECODER</h2>
-        
-        <!-- Encryption Type Selector -->
+
         <label>Select Encryption Type:</label>
         <select id="encryptionType" class="w-full p-2 rounded-md bg-gray-700 text-white mb-3" onchange="togglePasswordField()">
             <option value="aes">AES</option>
@@ -23,7 +23,6 @@
             <option value="rot13">ROT13</option>
         </select>
 
-        <!-- Password Input (For AES Only) -->
         <div id="passwordContainer" class="hidden">
             <input type="password" id="password" class="w-full p-3 rounded-md bg-gray-700 text-white mb-3" placeholder="Enter encryption password (AES only)">
         </div>
@@ -35,30 +34,46 @@
             <button onclick="decryptText()" class="bg-green-500 px-4 py-2 rounded-md shadow-md hover:bg-green-600 transition">Decrypt</button>
         </div>
 
-       <!-- Result Area -->
         <div class="mt-4">
             <label class="block mb-2">Result:</label>
             <textarea id="resultText" class="w-full p-3 text-black rounded-md resize-none h-40" readonly></textarea>
-    
-            <!-- Copy & Download Buttons -->
+
             <div class="flex space-x-2 mt-2">
-                <button onclick="copyToClipboard()" class="bg-yellow-500 px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition">
-                    Copy
-                </button>
-                <button onclick="downloadEncryptedText()" class="bg-blue-500 px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition">
-                    Download
-                </button>
+                <button onclick="copyToClipboard()" class="bg-yellow-500 px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition">Copy</button>
+                <button onclick="downloadEncryptedText()" class="bg-blue-500 px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition">Download</button>
             </div>
 
-            <!-- Generate QR Code Button -->
-            <button onclick="generateQRCode()" class="mt-2 bg-purple-500 px-4 py-2 rounded-md shadow-md hover:bg-purple-600 transition">
-                Generate QR Code
-            </button>
-
-            <!-- QR Code Display -->
+            <button onclick="generateQRCode()" class="mt-2 bg-purple-500 px-4 py-2 rounded-md shadow-md hover:bg-purple-600 transition">Generate QR Code</button>
             <div id="qrcode" class="mt-4 flex justify-center"></div>
         </div>
+    </div>
 
+    <!-- FILE ENCRYPTION SECTION -->
+    <div class="bg-gray-800 text-white p-6 rounded-2xl shadow-xl w-96">
+        <h2 class="text-xl font-bold text-center mb-4">File Encryption / Decryption</h2>
+
+        <!-- Method Selector -->
+        <label for="fileMethod">Select Method:</label>
+        <select id="fileMethod" onchange="toggleFilePassword()" class="w-full p-2 rounded-md bg-gray-700 text-white mb-3">
+            <option value="aes">AES</option>
+            <option value="base64">Base64</option>
+            <option value="xor">XOR</option>
+        </select>
+
+         <!-- Password Field (conditionally shown) -->
+        <div id="filePasswordContainer">
+            <input type="password" id="filePassword" class="w-full p-2 rounded-md bg-gray-700 text-white mb-3" placeholder="Enter password">
+        </div>
+
+        <!-- File Input -->
+        <input type="file" id="fileInput" class="w-full p-2 rounded-md bg-gray-700 text-white mb-3">
+
+        <!-- Buttons -->
+        <div class="flex justify-center space-x-4 mt-4">
+            <button onclick="encryptFile()" class="bg-blue-500 px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition">Encrypt</button>
+            <button onclick="decryptFile()" class="bg-green-500 px-4 py-2 rounded-md shadow-md hover:bg-green-600 transition">Decrypt</button>
+        </div>
+</div>
 
     <!-- Particle Background -->
     <style>
@@ -68,11 +83,11 @@
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -1; /* Sends it to the back */
-            pointer-events: none; /* Ensures elements above are clickable */
+            z-index: -1;
+            pointer-events: none;
         }
     </style>
-    
+
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <div id="particles-js" class="absolute top-0 left-0 w-full h-full -z-10"></div>
