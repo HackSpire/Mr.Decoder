@@ -168,3 +168,134 @@ window.onload = function () {
         document.getElementById("inputText").value = encryptedText;
     }
 };
+function encryptFile() {
+    const method = document.getElementById('fileMethod').value;
+    const password = document.getElementById('filePassword').value;
+    const fileInput = document.getElementById('fileInput');
+
+    if (!fileInput.files.length) {
+        alert('Please select a file.');
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const data = e.target.result;
+
+        let encryptedData, blob;
+        switch (method) {
+            case 'aes':
+                if (!password) return alert("Password required for AES");
+                const wordArray = CryptoJS.lib.WordArray.create(data);
+                encryptedData = CryptoJS.AES.encrypt(wordArray, password).toString();
+                blob = new Blob([encryptedData], { type: "text/plain;charset=utf-8" });
+                break;
+
+            case 'base64':
+                encryptedData = btoa(new Uint8Array(data).reduce((d, byte) => d + String.fromCharCode(byte), ""));
+                blob = new Blob([encryptedData], { type: "text/plain;charset=utf-8" });
+                break;
+
+            case 'xor':
+                if (!password) return alert("Password required for XOR");
+                const bytes = new Uint8Array(data);
+                for (let i = 0; i < bytes.length; i++) {
+                    bytes[i] ^= password.charCodeAt(i % password.length);
+                }
+                blob = new Blob([bytes], { type: "application/octet-stream" });
+                break;
+        }
+
+        downloadBlob(blob, file.name + ".encr");
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+function decryptFile() {
+    const method = document.getElementById('fileMethod').value;
+    const password = document.getElementById('filePassword').value;
+    const fileInput = document.getElementById('fileInput');
+
+    if (!fileInput.files.length) {
+        alert('Please select a file.');
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        try {
+            let decryptedBlob;
+
+            switch (method) {
+                case 'aes':
+                    if (!password) return alert("Password required for AES");
+                    const decryptedAES = CryptoJS.AES.decrypt(e.target.result, password);
+                    const words = decryptedAES.words;
+                    const sigBytes = decryptedAES.sigBytes;
+
+                    const u8 = new Uint8Array(sigBytes);
+                    for (let i = 0; i < sigBytes; i++) {
+                        u8[i] = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                    }
+                    decryptedBlob = new Blob([u8], { type: "application/octet-stream" });
+                    break;
+
+                case 'base64':
+                    const binaryStr = atob(e.target.result);
+                    const bytes = new Uint8Array(binaryStr.length);
+                    for (let i = 0; i < binaryStr.length; i++) {
+                        bytes[i] = binaryStr.charCodeAt(i);
+                    }
+                    decryptedBlob = new Blob([bytes], { type: "application/octet-stream" });
+                    break;
+
+                case 'xor':
+                    if (!password) return alert("Password required for XOR");
+                    const xorBytes = new Uint8Array(e.target.result.split(',').map(Number));
+                    for (let i = 0; i < xorBytes.length; i++) {
+                        xorBytes[i] ^= password.charCodeAt(i % password.length);
+                    }
+                    decryptedBlob = new Blob([xorBytes], { type: "application/octet-stream" });
+                    break;
+            }
+
+            const originalName = file.name.replace(/\.encr$/, '');
+            downloadBlob(decryptedBlob, originalName || "decrypted_file");
+        } catch (err) {
+            alert("Decryption failed. Check your method, file, or password.");
+        }
+    };
+
+    if (method === 'aes' || method === 'base64') {
+        reader.readAsText(file);
+    } else {
+        reader.readAsArrayBuffer(file);
+    }
+}
+
+function downloadBlob(blob, filename) {
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+function toggleFilePassword() {
+    const method = document.getElementById("fileMethod").value;
+    const container = document.getElementById("filePasswordContainer");
+
+    if (method === "aes" || method === "xor") {
+        container.style.display = "block";
+    } else {
+        container.style.display = "none";
+    }
+}
+
+// Initialize on page load (optional)
+window.addEventListener("DOMContentLoaded", toggleFilePassword);
