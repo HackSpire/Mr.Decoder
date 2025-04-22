@@ -256,7 +256,7 @@ function decryptFile() {
 
                 case 'xor':
                     if (!password) return alert("Password required for XOR");
-                    const xorBytes = new Uint8Array(e.target.result.split(',').map(Number));
+                    const xorBytes = new Uint8Array(e.target.result);
                     for (let i = 0; i < xorBytes.length; i++) {
                         xorBytes[i] ^= password.charCodeAt(i % password.length);
                     }
