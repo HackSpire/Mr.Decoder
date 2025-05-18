@@ -31,10 +31,6 @@ function encryptText() {
             result = btoa(inputText);
             break;
 
-        case "rot13":
-            result = rot13(inputText);
-            break;
-
         default:
             alert("Invalid encryption type.");
             return;
@@ -81,24 +77,12 @@ function decryptText() {
             }
             break;
 
-        case "rot13":
-            result = rot13(inputText);
-            break;
-
         default:
             alert("This encryption type cannot be decrypted.");
             return;
     }
 
     document.getElementById("resultText").value = result;
-}
-
-// ROT13 encryption/decryption function
-function rot13(str) {
-    return str.replace(/[a-zA-Z]/g, function (char) {
-        let base = char <= "Z" ? 65 : 97;
-        return String.fromCharCode(((char.charCodeAt(0) - base + 13) % 26) + base);
-    });
 }
 
 // Copy result to clipboard
